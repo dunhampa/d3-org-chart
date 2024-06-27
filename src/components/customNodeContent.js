@@ -30,12 +30,6 @@ const styles = {
     color: "#fef9ef",
     fontSize: "1.5rem",
   },
-  nodeTeamMemberImg: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "50%",
-    margin: "0.2rem",
-  },
   nodeImg: {
     width: "90px",
     height: "90px",
@@ -72,47 +66,36 @@ const styles = {
 };
 
 const CustomNodeContent = (props) => {
+  console.log("Props received: ", props);
+
+  const isTeamNode = props.data.team !== "";
+
   return (
-    <>
-      <div style={styles.nodeContainer}>
-        <div style={styles.nodeDetails}>
-          {props.data.team === "" ? (
-            <div style={styles.nodeContent}>
-              <img
-                style={styles.nodeImg}
-                src={props.data.imageUrl}
-                alt="Profile"
-              />
-              <div style={styles.nodeInfo}>
-                <div style={styles.nodeName}>{props.data.name}</div>
-                <div style={styles.nodeRole}>{props.data.positionName}</div>
-                {props.data.department && (
-                  <div style={styles.nodeDepartment}>
-                    <FaBuilding style={styles.icon} />
-                    <div>{props.data.department}</div>
-                  </div>
-                )}
+    <div style={styles.nodeContainer}>
+      <div style={styles.nodeDetails}>
+        <div style={styles.nodeContent}>
+          <img
+            style={styles.nodeImg}
+            src={props.data.imageUrl}
+            alt={isTeamNode ? "Team Profile" : "Profile"}
+          />
+          <div style={styles.nodeInfo}>
+            <div style={styles.nodeName}>
+              {isTeamNode ? props.data.team : props.data.name}
+            </div>
+            <div style={styles.nodeRole}>
+              {isTeamNode ? "" : props.data.positionName}
+            </div>
+            {props.data.department && !isTeamNode && (
+              <div style={styles.nodeDepartment}>
+                <FaBuilding style={styles.icon} />
+                <div>{props.data.department}</div>
               </div>
-            </div>
-          ) : (
-            <div style={styles.nodeTeam}>
-              <div style={styles.nodeTeamName}>{props.data.team}</div>
-              {props._children !== null &&
-                props._children
-                  .slice(0, 4)
-                  .map((child) => (
-                    <img
-                      key={child.data.id}
-                      style={styles.nodeTeamMemberImg}
-                      src={child.data.imageUrl}
-                      alt="team member"
-                    />
-                  ))}
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
